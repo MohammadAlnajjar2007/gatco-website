@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GATCO | لوحة تحكم عروض الأسعار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1F2A52; --navy-deep:#131A34; --steel:#3E5C99; --accent:#5D7FB9;
+    --fog:#EFF2F7; --concrete:#D6DBE4; --ink:#14181C; --paper:#FFFFFF;
+    --line:rgba(31,42,82,0.14); --ok:#2f8f5b; --err:#b23b3b;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'IBM Plex Sans Arabic', sans-serif; background:var(--fog); color:var(--ink);
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  h1,h2,h3{font-family:'Tajawal', sans-serif;}
+  .card{
+    background:#fff; width:100%; max-width:560px; border-radius:10px;
+    box-shadow:0 20px 50px rgba(20,30,50,0.12); overflow:hidden;
+  }
+  .card-head{background:var(--navy-deep); color:#fff; padding:26px 30px;}
+  .card-head .eyebrow{color:var(--accent); font-size:12.5px; font-weight:700; letter-spacing:0.14em; margin-bottom:6px;}
+  .card-head h1{font-size:21px; font-weight:800;}
+  .card-head p{font-size:13.5px; color:#c9d4de; margin-top:6px;}
+  .card-body{padding:30px;}
+
+  /* login */
+  .field{display:flex; flex-direction:column; gap:6px; margin-bottom:16px;}
+  .field label{font-size:13.5px; font-weight:600; color:var(--navy-deep);}
+  .field input, .field select, .field textarea{
+    border:1.5px solid var(--concrete); border-radius:6px; padding:12px 14px; font-size:15px;
+    font-family:inherit; color:var(--ink); background:#fbfcfd; width:100%; transition:border-color .2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color:var(--accent); background:#fff; }
+  .field textarea{resize:vertical; min-height:70px;}
+  .hint{font-size:12.5px; color:#8b93a0; margin-top:-8px; margin-bottom:16px;}
+  .btn{
+    width:100%; background:var(--navy-deep); color:#fff; font-weight:700; font-size:15px;
+    padding:14px; border:none; border-radius:6px; cursor:pointer; transition:background .2s;
+  }
+  .btn:hover{background:var(--navy);}
+  .btn:disabled{opacity:0.6; cursor:not-allowed;}
+  .msg{font-size:13.5px; margin-top:12px; text-align:center; display:none;}
+  .msg.err{color:var(--err); display:block;}
+  .msg.ok{color:var(--ok); display:block;}
+  .price-row{display:flex; gap:10px; align-items:flex-end;}
+  .price-row .field{flex:1; margin-bottom:0;}
+  .currency{
+    flex:none; padding:12px 14px; border:1.5px solid var(--concrete); border-radius:6px;
+    background:var(--fog); font-weight:700; font-size:14px; color:var(--navy-deep);
+  }
+  .success-box{text-align:center; padding:10px 0;}
+  .success-box .ok-icon{
+    width:60px; height:60px; border-radius:50%; background:rgba(47,143,91,0.12); color:var(--ok);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:28px;
+  }
+  .success-box h3{font-size:19px; color:var(--navy-deep); margin-bottom:8px;}
+  .success-box p{font-size:14.5px; color:#4b5560; margin-bottom:18px;}
+  .link-btn{
+    display:inline-block; background:var(--fog); color:var(--navy-deep); font-weight:700; font-size:14px;
+    padding:11px 22px; border-radius:6px; border:1px solid var(--concrete); cursor:pointer;
+  }
+  .top-note{font-size:12px; color:#8b93a0; text-align:center; margin-top:16px;}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-head">
+    <div class="eyebrow">GATCO ADMIN</div>
+    <h1 id="headTitle">تسجيل الدخول</h1>
+    <p id="headSub">لوحة إرسال عروض الأسعار للعملاء</p>
+  </div>
+  <div class="card-body">
+
+    <!-- LOGIN VIEW -->
+    <div id="loginView">
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور">
+      </div>
+      <button class="btn" id="loginBtn" type="button">دخول</button>
+      <div class="msg err" id="loginMsg"></div>
+      <p class="top-note">هذه الحماية بسيطة (من طرف المتصفح) لغرض الفرز الأولي فقط، وليست بديلاً عن نظام دخول حقيقي إن رغبتم بحماية أقوى مستقبلًا.</p>
+    </div>
+
+    <!-- QUOTE VIEW -->
+    <div id="quoteView" style="display:none;">
+      <form id="priceForm">
+        <div class="field">
+          <label>رقم الطلب (من إيميل الإشعار) *</label>
+          <input type="text" id="f_request_id" placeholder="مثال: GQ-XXXXXXX" required>
+        </div>
+        <div class="field">
+          <label>اسم العميل *</label>
+          <input type="text" id="f_customer_name" required>
+        </div>
+        <div class="field">
+          <label>البريد الإلكتروني للعميل *</label>
+          <input type="email" id="f_customer_email" required>
+        </div>
+        <div class="field">
+          <label>السعر المقترح *</label>
+          <div class="price-row">
+            <input type="number" id="f_price" min="0" step="0.01" placeholder="0.00" required>
+            <div class="currency">ر.س SAR</div>
+          </div>
+        </div>
+        <div class="field" style="margin-top:16px;">
+          <label>ملاحظات إضافية للعميل (اختياري)</label>
+          <textarea id="f_notes" placeholder="مدة صلاحية العرض، شروط الدفع، ملاحظات..."></textarea>
+        </div>
+        <button class="btn" id="sendBtn" type="submit">إرسال السعر للعميل عبر البريد</button>
+        <div class="msg err" id="sendMsg"></div>
+      </form>
+
+      <div id="successBox" class="success-box" style="display:none;">
+        <div class="ok-icon">✓</div>
+        <h3>تم إرسال العرض بنجاح</h3>
+        <p>تم إرسال السعر إلى بريد العميل. يمكنك الآن إدخال طلب آخر.</p>
+        <button class="link-btn" id="anotherBtn" type="button">إرسال عرض آخر</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     إعدادات لوحة الأدمن — عدّل القيم التالية فقط
+     ============================================================
+     1) ADMIN_PASSWORD: كلمة المرور لدخول اللوحة (غيّرها لكلمة سرية خاصة بكم)
+     2) EMAILJS_PUBLIC_KEY / SERVICE_ID: نفس القيم المستخدمة في index.html
+     3) EMAILJS_CUSTOMER_TEMPLATE_ID: قالب جديد في EmailJS خاص برد السعر للعميل
+        - اجعل حقل To Email في هذا القالب = {{to_email}}  (بريد ديناميكي)
+        - استخدم هذه المتغيرات داخل نص القالب:
+          {{request_id}} {{customer_name}} {{price}} {{notes}}
+  ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  const ADMIN_PASSWORD = "CHANGE_ME";
+
+  const EMAILJS_PUBLIC_KEY           = "YOUR_PUBLIC_KEY";
+  const EMAILJS_SERVICE_ID           = "YOUR_SERVICE_ID";
+  const EMAILJS_CUSTOMER_TEMPLATE_ID = "YOUR_CUSTOMER_TEMPLATE_ID";
+
+  if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
+
+  const loginView   = document.getElementById('loginView');
+  const quoteView   = document.getElementById('quoteView');
+  const loginMsg    = document.getElementById('loginMsg');
+  const headTitle   = document.getElementById('headTitle');
+  const headSub     = document.getElementById('headSub');
+
+  document.getElementById('loginBtn').addEventListener('click', function(){
+    const pass = document.getElementById('loginPassword').value;
+    if (pass === ADMIN_PASSWORD){
+      loginView.style.display = 'none';
+      quoteView.style.display = 'block';
+      headTitle.textContent = 'إرسال عرض سعر';
+      headSub.textContent = 'أدخل بيانات الطلب والسعر ليصل العميل عبر البريد';
+    } else {
+      loginMsg.textContent = 'كلمة المرور غير صحيحة.';
+      loginMsg.style.display = 'block';
+    }
+  });
+  document.getElementById('loginPassword').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') document.getElementById('loginBtn').click();
+  });
+
+  const priceForm  = document.getElementById('priceForm');
+  const sendBtn    = document.getElementById('sendBtn');
+  const sendMsg    = document.getElementById('sendMsg');
+  const successBox = document.getElementById('successBox');
+
+  priceForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    sendMsg.style.display = 'none';
+
+    const params = {
+      request_id: document.getElementById('f_request_id').value,
+      customer_name: document.getElementById('f_customer_name').value,
+      to_email: document.getElementById('f_customer_email').value,
+      price: document.getElementById('f_price').value + ' ر.س',
+      notes: document.getElementById('f_notes').value || '-'
+    };
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'جاري الإرسال...';
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CUSTOMER_TEMPLATE_ID, params)
+      .then(function(){
+        priceForm.style.display = 'none';
+        successBox.style.display = 'block';
+      })
+      .catch(function(){
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'إرسال السعر للعميل عبر البريد';
+        sendMsg.textContent = 'تعذر إرسال البريد. تحقق من إعدادات EmailJS وحاول مجددًا.';
+        sendMsg.style.display = 'block';
+      });
+  });
+
+  document.getElementById('anotherBtn').addEventListener('click', function(){
+    priceForm.reset();
+    priceForm.style.display = 'block';
+    successBox.style.display = 'none';
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'إرسال السعر للعميل عبر البريد';
+  });
+</script>
+
+</body>
+</html>

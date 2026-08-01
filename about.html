@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GATCO | من نحن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- QUOTE REQUEST MODAL -->
+<div class="quote-overlay" id="quoteOverlay">
+  <div class="quote-modal">
+    <div class="quote-head">
+      <button class="quote-close" id="quoteClose" aria-label="إغلاق" type="button">✕</button>
+      <div class="eyebrow">REQUEST A QUOTE</div>
+      <h3>اطلب عرض سعر الآن</h3>
+      <p>عبّئوا التفاصيل التالية، وسيتواصل معكم فريق GATCO بالسعر عبر البريد الإلكتروني في أقرب وقت.</p>
+    </div>
+    <div class="quote-body" id="quoteBody">
+      <form id="quoteForm">
+        <div class="qf-grid">
+          <div class="qf-field">
+            <label>الاسم الكامل *</label>
+            <input type="text" name="customer_name" required>
+          </div>
+          <div class="qf-field">
+            <label>رقم الجوال *</label>
+            <input type="tel" name="customer_phone" required>
+          </div>
+          <div class="qf-field">
+            <label>البريد الإلكتروني *</label>
+            <input type="email" name="customer_email" required>
+          </div>
+          <div class="qf-field">
+            <label>اسم الشركة</label>
+            <input type="text" name="company">
+          </div>
+          <div class="qf-field">
+            <label>نوع الخدمة *</label>
+            <select name="service_type" required>
+              <option value="">اختر الخدمة</option>
+              <option>نقل ثقيل</option>
+              <option>تخزين البضائع</option>
+              <option>الشحن والمتابعة</option>
+            </select>
+          </div>
+          <div class="qf-field">
+            <label>نوع المعدة المطلوبة</label>
+            <select name="equipment_type">
+              <option value="">اختر المعدة (اختياري)</option>
+              <option>السطحات والبالكر</option>
+              <option>الهوابر والفريمات الخرسانية</option>
+              <option>السطحات الطويلة</option>
+              <option>تانكيات الماء والقلابات</option>
+              <option>صهاريج الصرف الصحي</option>
+              <option>اللوابد</option>
+              <option>تانكيات الأكسجين</option>
+              <option>الرافعات (كرينات)</option>
+              <option>الرافعات الشوكية</option>
+            </select>
+          </div>
+          <div class="qf-field">
+            <label>موقع التحميل *</label>
+            <input type="text" name="pickup_location" required>
+          </div>
+          <div class="qf-field">
+            <label>موقع التسليم *</label>
+            <input type="text" name="delivery_location" required>
+          </div>
+          <div class="qf-field full">
+            <label>تفاصيل إضافية</label>
+            <textarea name="details" placeholder="نوع البضاعة، الوزن، الأبعاد، التوقيت المطلوب..."></textarea>
+          </div>
+        </div>
+        <button type="submit" class="qf-submit" id="qfSubmitBtn">أرسل طلب السعر</button>
+        <div class="qf-error" id="qfError" style="display:none;"></div>
+        <p class="qf-note">بإرسال الطلب أنت توافق على تواصل فريقنا معك عبر البريد الإلكتروني أو الجوال.</p>
+      </form>
+    </div>
+  </div>
+</div>
+<button class="quote-fab" onclick="openQuoteModal()" type="button">💬 اطلب عرض سعر</button>
+
+<header>
+  <nav class="wrap">
+    <a href="index.html" class="brand">
+      <div class="mark"><img src="data:image/png;base64,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" alt="GATCO"></div>
+      <div class="brand-text">GATCO</div>
+    </a>
+    <div class="navlinks">
+      <a href="about.html">من نحن</a>
+      <a href="values.html">قيمنا</a>
+      <a href="services.html">خدماتنا</a>
+      <a href="equipment.html">معداتنا</a>
+      <a href="coverage.html">مناطق التغطية</a>
+      <a href="org-structure.html">الهيكل التنظيمي</a>
+      <a href="index.html#clients">عملاؤنا</a>
+    </div>
+    <a href="index.html#contact" class="nav-cta">تواصلوا معنا</a>
+  </nav>
+</header>
+
+<section class="page-banner">
+  <div class="wrap">
+    <a href="index.html" class="crumb">→ العودة للرئيسية</a>
+    <div class="eyebrow">ABOUT US</div>
+    <h1>من نحن</h1>
+    <p>تعرّفوا على GATCO، شريككم الموثوق في النقل الثقيل والخدمات اللوجستية بالمملكة ودول الخليج.</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">ABOUT US</div>
+      <h2>من نحن</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p>في عالم يعتمد على السرعة والدقة، تأتي <strong>شركة الخليجية المتطورة للنقل الثقيل والخدمات اللوجستية (GATCO)</strong> لتكون شريككم الموثوق، حيث نقدّم حلولاً متكاملة تشمل النقل الثقيل، تخزين البضائع، وتصنيع الأسطح بما يلبي احتياجات مختلف القطاعات الصناعية والتجارية.</p>
+        <p>كما نتميز بتقديم خدمات الطرق والسلامة المرورية، من صيانة اللوحات الإرشادية والمرورية ولوحات الترقيم وعلامات الطرق، إلى صيانة الحواجز الخرسانية ومصدات السيارات، لنضمن لعملائنا نقلاً آمنًا وخدمات ميدانية موثوقة تعزز من كفاءة وأمان أعمالهم.</p>
+      </div>
+      <div class="vm-cards reveal">
+        <div class="vm-card">
+          <h3>رؤيتنا <span class="label-en">VISION</span></h3>
+          <p>أن نصبح الوجهة الأولى في المملكة والخليج لحلول النقل الثقيل والخدمات اللوجستية، بفضل التزامنا المستمر بالجودة والابتكار.</p>
+        </div>
+        <div class="vm-card mission">
+          <h3>رسالتنا <span class="label-en">MISSION</span></h3>
+          <p>تقديم خدمات نقل وتخزين وتصنيع سطحات بمستوى عالمي من الكفاءة، تسهم في تعزيز نجاح عملائنا وتوسيع نطاق أعمالهم.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUSTED PARTNER -->
+<section class="partner" id="partner">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">YOUR TRUSTED PARTNER</div>
+      <h2>شريككم الأمثل</h2>
+      <p>ندير عنك تحديات النقل لتبقى رحلتك نحو النجاح خفيفة.</p>
+    </div>
+    <div class="pgrid">
+      <div class="pitem reveal">
+        <div class="mk">01</div>
+        <div><h4>خبرة عميقة في القطاع</h4><p>سنوات من العمل في النقل الثقيل والخدمات اللوجستية جعلتنا نفهم احتياجات العملاء بعمق ونقدم حلولاً دقيقة.</p></div>
+      </div>
+      <div class="pitem reveal">
+        <div class="mk">02</div>
+        <div><h4>أسطول ومعدات بمعايير عالمية</h4><p>نمتلك مركبات ومعدات نقل حديثة ومتطورة تضمن الأمان والالتزام بالمواعيد.</p></div>
+      </div>
+      <div class="pitem reveal">
+        <div class="mk">03</div>
+        <div><h4>حلول متكاملة</h4><p>نقدّم خدمات شاملة تجمع النقل الثقيل والتخزين وتصنيع الأسطح لتلبية جميع متطلبات العميل في مكان واحد.</p></div>
+      </div>
+      <div class="pitem reveal">
+        <div class="mk">04</div>
+        <div><h4>التزام صارم بالجودة</h4><p>نضع الجودة في صميم كل عملية، مما ينعكس على كفاءة التنفيذ ورضا العملاء.</p></div>
+      </div>
+      <div class="pitem reveal">
+        <div class="mk">05</div>
+        <div><h4>فريق عمل محترف</h4><p>كوادر مدربة وفق أعلى المعايير لضمان تقديم خدمة موثوقة وسريعة.</p></div>
+      </div>
+      <div class="pitem reveal">
+        <div class="mk">06</div>
+        <div><h4>مرونة واستجابة عالية</h4><p>نكيّف خدماتنا حسب احتياجات العملاء المتغيرة ونتجاوب مع التحديات بسرعة.</p></div>
+      </div>
+      <div class="pitem reveal" style="grid-column:1/-1;">
+        <div class="mk">07</div>
+        <div><h4>رؤية طويلة المدى</h4><p>نركّز على بناء شراكات استراتيجية تعزز نمو عملائنا واستدامة أعمالهم.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <footer>
+    <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px;">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWQAAAFlCAYAAADcR5KFAAAP9ElEQVR4nO3d2VIcS7JA0VDb+f9f1n2QuGIoiqyqGHxYy6wf+xhkeGxcCRK/fv/+PQA473+nPwAA/hBkgCAEGSAIQQYIQpABghBkgCAEGSAIQQYIQpABghBkgCAEGSAIQQYIQpABghBkgCD+O/0BwJOu/ruxv5Z+FDCRIHPa6n+Q+5n/vohzhCCzQ7bfgnDv4xVrlhFkZsoW3md89zkKNS8TZJ7VIb6PuPU8RJqHCDJXiO9zRJqHCDK3CPA6n5+tQPP/BJk3InzG++cuzs0Jcm8iHIs4NyfI/YhwDuLckCD3IcR5vZ2dMBcnyLWJcC225uIEuR4R7kGcCxLkOoS4L680ihDk3ESY92zNyQlyTkLMT2zNCQlyLkLMo4Q5Eb8xJIffQ4x5jflJQJDjc5GYxRf24LyyiMvFYRWvMYIS5HiEmF2EORhBjkOIOUWYgxDk84SYKIT5MN/UO0uMichcHmJDPsPAE51t+QAb8n5iTCbmdSMb8j4Gm6xsy5sI8npCTBXCvJhXFmuJMRWZ60UEeR1DS2X+GvYCgjyfQaUTsz6RIM9lOOnI3E8iyPMYSjoz/xP4KYvXGUT4w09hvMiG/Boxhq/ciycJ8vMMHXzP/XiCVxaPM2hwjVcYD7IhP0aM4XHuzUWCfJ2hgue5PxcI8jWGCV7nHv1AkH9miGAe9+kOQb7P8MB87tU3BPk2/x4FrOV+3SDIXxkU2MPi84kgf2Q4YD/37i9B/sdQwDnu3xDkN4YBzmt/DwXZEEAkre9j9yC3PnwIqu297BzktocOCbS8n12D3PKwIZl297RjkNsdMiTW6r52C3Krw4Ui2tzbTkFuc6hQUIv76zeGENXu3zLR4sIn93sU/+0jXYLsssUU6XLd+1jMD1t0CLLLFEOk+D7q88dups4pvSVXD7KLc07ZSzME+rSyUa4cZJdkv5KX5IK3z9vM7VMyylWD7GLsU+5SvOD9szCD65WLcsUguwjrlboEi4jzHqWiXC3IBn+dMkN/gFcaa5WJcrUgM1+JQQ/C1sxdlYJswOcR4fVszXOV2JKr/NVpQz3Hr1FgqJPxzOdJ34EKQU5/CAGIwnnOYI7UPcge5NQPPwARiMd5vC5tFyq9Q+Y6lz4275ebyrwhG9bH2YhzcV7PS9mHrEFO+bAPcrFzc37PSdeJrEHmOhe5DmdZXMYgp/uqd4itqibn+phUvcgW5FQP9xAXtgdnfF2abmQKcpqHepBL2osvvtel6EemIHOfi9mXsy8iS5BTfHU7xJbEGGbgivAdyRDk8A/xIJeQ93xxTi5DkLnNxeM7ZuN7oRe86EEO/fAOsQVxhRn5XtiuRA5y2Id2kEvGI3zxTiZykPnIxeJZZuerkAtf1CCHfFgHuVC8ygwlEDXI/OMiMYtZ+ijc4hcxyOEe0kEuELOZqY9C9SZikPnDxWEV3+wLKlqQQ321OshlYQdz9keY7kQKcpiHcphLwk7mLZBIQcbl4AyvMIIshFGCHOJhHNb9QnCeGTwsSpC7cxGIovMsHl8MIwT5+EM4rPMFICYzeUiEIHdm8Imq62weXRBPB7nzdtx14MnDN/s2Ox3krgw5mXSb12OL4skgd96OIZtuUT7ChryfwSarTq8wjiyMp4LcdTvuMszUZo4XsSEDz+gQ5e2L44kg246hhk6vMLawIe9haKnMfE8iyOsZVjqoOudb/0S/O8hdX1dAB15hvMiGvJbhpKNqc79tkdwZ5G7bcbWhhEeY/yfYkIFVKr3C2LJQCvIaVYYQZnAfLtoV5G6vK4CPRPkCG/J8Bg9uy/4KY/liKchzZR422CV7mJfZEWSvK4BbRPkTG/I8hgsel+3eLF0wVwfZdgz8xCuMv2zIcxgmeF37eyTIQCQZtuVlf/JfGeQuryuiDw9klCHM09mQgchahVmQX9NmUOCwaHdtyRsAQQayKL8trwpyh/fHpQcDAit792zIQEYlt2VBBjI7GebpbwJWBNnrCmC3EhuzDRmoJHWYBflxaQ8bGtkV5qlvBAQZqCzVxizIQAcpwjw7yNW/oRf+QIG7QofZhgx0NDPM0xZRQb4u7FdV4GmhNub/Tn8AAAG8j/KxV682ZICPjm3NMzfkyt/QC/NHGmCb7VuzDRngZ1u2ZkEGuG5pmAUZ4HFLwuynLH7m/THwnal9sCEDBDEryJV/wgJgCxsyQBDeId/n/XEPmf6EZyYLE2SqyxTbK65+PsKdkCBTRbXwvure8xDroASZrAT4ed89O6E+TJC/ZzhjEeD1bj1j92CjGUF2UVjBXMXw+RwEeiEbMlEIcA626IUEmZNEuAZb9CSCzE4C3IMt+kmCzGoizBgf50CcvyHItxmY1wkx3/GK4xuCzEwizDNsz38JMjMIMbO8zVLLMAsyzxJhVmr5WkOQeZQQc0KL1xqCzFVCTBRl4yzI3CPCRFcqzoLMLUJMRum/IfhqkF3cWpwnFaTdmm3IjCHE1JVqaxZkxJgOUmzNgvxV2MOarGKId5xdxefWTditWZD7yRSUcBdmPPYxZXrWHYXbmgW5j6hxCHERFrn3uUU9j65CbM2CXF+ki185vo+69SwinVVXR7dmQa7t5AUX38eJdCzbt2ZBrmnnJRbetUT6vG1hFuR6Vl5W8Y3h8zkI9B7LwyzIX/0eOcMz+1JmfAZd2aL3WvaeWZBrmHX5RLiO92cpzutMXeAEObdXL5oA9yDOa017lSHIeT17sUS4N3Fe5+VtWZBzevQiiTC3iPN8L0VZkHN55NKIMI8Q5wBeDfKv4fB2ufKcRZgZ3ubI3d7MhpzDvYshwqzi5503E+ScRJgTbM6LCXIOAkwkwryIIN+W9W/rcc0zITEPX/lG4GSCTHa7QiDi99maJxBkMsh6yTt+M1aYXyDIRNPlIn/3eVYJtTA/QZA5yWX96vMzyR7obu+Z/dVp0uhwIWe79cyyRtrW/ANB/p6ftHiNS7dO9kgL8zdmBNlfn2YMM3BaxlcdwvyJDZlnuUSxZQq0pe4vQeYRLk1eR3+9/QW25SHI/Kz1BSkqcpxbh1mQ7+v8jb2WF6KhqHFuGWZB5r1Ww88XEeOcKcx+px5TZBh29ooW50xhfpog91V6sJlq2m9VnqD0T2T8+v172udW9iGNGIM4w+4z2vHcKs9dZBHuRLSz98qCS1YMboQLOcb1jyPa5c0uwiuNctuyINf26rBGie4M9z6XUpf6gJOvNEq9W/bK4rpMcXr0LDJ9bjtVn+lVTs7TqTOb8jnbkGu5Mozie913z0qo77MxP2lmkMu9z0mk42+mOOnzMzX3t50Oc7pzmfnKYoyED+BBkeMW4Zss/FH9Hjzr1FzuOA+vLPhAhOPo9lsyrjq1NKTZlv93+gOA4n69+x///B57I7ny+U/7b9uQH9P5Hxvidd49f7XzPXP4b/jN3pDFCq6zPf9TZVt+iVcWjwv71ZXUxHnva4yQz1qQIZ7ucd4d5pP//w+8Q4bYOv/Exq73y2HeLa/YkDt8VT9+cLTUdWvetTEff7ZeWUA+ncO82iPPdfoZCPLzbMmc1vFd845t+dgzFWSoQZjn2/48VwW5y2DYkomm29ZcKso2ZKirS5hXb8u3nuOS5yrIr7MlE12nMK+0/E8fK4PcYQAgkw5h3v2PFk1lQ54j7QDQUpcwpyPI0Ff1MKfbllcHufJhf5bq4OGdDmFOwYYMvKkc5hTbsiDPFf7A4YLqYQ5rR5CrHixUVzXMYaNsQ54v7GHDkyqGOeQrjF1BrnaYPwl30DBBxXsc6q7akIFHVI1yiDAL8johDhgWqBjlMQLc2Z1BrnqI9xw/YFig8lwf3ZZtyABfHYny7iDbkiG3TvO8/XO1Ie/RaYipyxwvJsgAQZwIcsfXFmPYLsjN/G5gQ97LUJNR17kt80tOf9J1Sx6j73CTk3ndyIYMfKdzjI8sjSeDbEsGeMeGfI4oE1nn+Ty2LJ4OcucteYzeQ09c5vKQ00HG8BNL93k8uiRGCHL3LXkMl4AYzOFhEYLMHy4DJ5m/AMthlCAffxBBuBScYO6CiBJk4Awx/iPEUhgpyCEeSAAuCLuYtT/CtCdSkMcI9GAOc1FYzYwFFC3I/BPmFy9Sjrn6J9QSGDHIoR5QAC4PM5mnwCIGma9cImYwRx+FW/6iBjncgwrAZeIV5ieBqEEeQ5Rvcal4hrn5KmRfIgeZ21wuHmFevgoZ4zHiBznsgzvMJeMKc5LMf6c/AJ72dtl80eIzIf5e6PsSfUMeI/gDDMDl4z3zkFiGII8hyj/xl0gwAz8L35EsQeYaF7In5/6z8DEeI1eQUzzQAGxKvTjrQjIFeQxRfoSLWpsvvNel6Ua2II+R6OEG4MLW5FyvS9ULP/ZWnx+Pq0OIi8u4IY8hLs/wR9y8nN1z0nUia5DHSPiwg3C583BWz0vZB68s+vIqIy4Rfk3amc68IY+R+MEH4vLH4jwayx7kMUR5Bn80Ps8ZzJG6BxWCPEbyQwhEFPbzzOdJ34FK75B/DYM9y/vnmH7IgzKrc5WY00pBZg3f/JtHhLmrWpBtyevYmp9jHtcrM4/VgjyGKO8gzveZv31KzV/FII8hyjuJs1k7pdy8VQ3yGKJ8wufnXe7CvGO2zio5W5WDPIYon1ZtezZLMVSYpZuqB3kMUY7i1hlEvlhmJqbIM/OyDkEmrnvRW33xBJdwugTZlpyP8+Kz0tvxGHX+6vQV5Q8TCmtxfzsFeYwmhwrFtLm33YI8RqPDhQJa3deOQR6j2SFDUu3uadcgj9HwsCGRlvezc5DHaHroEFzbe9k9yGM0PnwIqPV9FOQ/Wg8BBNH+HgryP+2HAQ5y/4Ygf2YoYD/37i9B/spwwD7u2zuCfJshgbV+DffsC0H+noGBNdyrbwjyzwwPzOM+3SHI1xgieJ179ANBvs4wwfPcnwsE+TGGCh7jezEPEOTHGS64xl15kCA/x1d9uM/9eIIgv8bQwVfuxZO6/JLTld6Gzy/lpDshfpENeR7DSGfmfwJBnstQ0o3vp0wkyPMZTrow65MJ8hq2Bqoz3wsI8lqGlmosGwv5KYv1/BQGFYjwBjbkfQw0WZndTWzIe9mWyUSINxPkM4SZyIT4EK8szjL4RGMmD7Ihn2dbJgIhDkCQ4xBmThDiQAQ5HmFmByEOSJDjEmZWEOLABDk+YWYGIU5AkPMQZp4hxIn4sbd8/FsCXGVOkrEh52Vj5hYRTkyQ8xNmxhDiEgS5jvcXUpz7EOJCBLkmW3NtIlyUINdma65DhBsQ5D7EOSchbkSQexLn2ES4KUFGnGMQYQSZD8R5LxHmA0HmO59jIdCvE2DuEmSuuhUTkb5PgHmIIPMKkf5HfHmZIDPbvTBlj7XospQgs9NPQYsQbNHlGEEmkldieCvm4koqgkwV4kt6/oF6gCAEGSAIQQYIQpABghBkgCAEGSAIQQYIQpABghBkgCAEGSAIQQYIQpABghBkgCAEGSCI/wMXaEktFjYFHgAAAABJRU5ErkJggg==" alt="" style="width:22px; height:22px;">
+    </div>
+    جميع الحقوق محفوظة © 2026 <span>GATCO</span> — شركة الخليجية المتطورة للنقل الثقيل والخدمات اللوجستية
+  </footer>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+<!-- ============================================================
+     نظام طلب عرض السعر — مرتبط بـ Google Apps Script (بدون سيرفر)
+     ============================================================
+     ضع رابط الـ Web App الذي حصلت عليه من Google Apps Script هنا فقط:
+  ============================================================ -->
+<script>
+  const APPS_SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+
+  const quoteOverlay = document.getElementById('quoteOverlay');
+  const quoteBody    = document.getElementById('quoteBody');
+  const quoteForm    = document.getElementById('quoteForm');
+  const qfError      = document.getElementById('qfError');
+  const qfSubmitBtn  = document.getElementById('qfSubmitBtn');
+
+  function openQuoteModal(){
+    quoteOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeQuoteModal(){
+    quoteOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('quoteClose').addEventListener('click', closeQuoteModal);
+  quoteOverlay.addEventListener('click', function(e){ if (e.target === quoteOverlay) closeQuoteModal(); });
+
+  // لا يفتح تلقائيًا في هذه الصفحة
+
+  function genRequestId(){
+    return 'GQ-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2,5).toUpperCase();
+  }
+
+  quoteForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    qfError.style.display = 'none';
+
+    const fd = new FormData(quoteForm);
+    const params = {
+      request_id: genRequestId(),
+      customer_name: fd.get('customer_name'),
+      customer_phone: fd.get('customer_phone'),
+      customer_email: fd.get('customer_email'),
+      company: fd.get('company') || '-',
+      service_type: fd.get('service_type'),
+      equipment_type: fd.get('equipment_type') || '-',
+      pickup_location: fd.get('pickup_location'),
+      delivery_location: fd.get('delivery_location'),
+      details: fd.get('details') || '-',
+      request_date: new Date().toLocaleString('ar-SA')
+    };
+
+    qfSubmitBtn.disabled = true;
+    qfSubmitBtn.textContent = 'جاري الإرسال...';
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(Object.assign({action:'new_request'}, params))
+    })
+      .then(function(){
+        quoteBody.innerHTML =
+          '<div class="qf-success">' +
+            '<div class="ok">✓</div>' +
+            '<h4>تم استلام طلبكم بنجاح</h4>' +
+            '<p>سيتواصل معكم فريق GATCO بعرض السعر عبر البريد الإلكتروني خلال وقت قصير.</p>' +
+            '<div class="rid">' + params.request_id + '</div>' +
+            '<p style="font-size:13px;color:#8b93a0;">يرجى الاحتفاظ برقم الطلب هذا للمتابعة.</p>' +
+          '</div>';
+      })
+      .catch(function(){
+        qfSubmitBtn.disabled = false;
+        qfSubmitBtn.textContent = 'أرسل طلب السعر';
+        qfError.style.display = 'block';
+        qfError.textContent = 'حدث خطأ أثناء إرسال الطلب. حاول مرة أخرى أو تواصلوا معنا هاتفيًا.';
+      });
+  });
+</script>
+
+</body>
+</html>
